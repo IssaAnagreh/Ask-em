@@ -9,8 +9,7 @@ import {
   AsyncStorage,
   ScrollView
 } from "react-native";
-import { Container, Header, Text as Textbase, Left } from "native-base";
-import { Icon } from 'react-native-elements';
+import { Container, Header, Text as Textbase, Left, Icon } from "native-base";
 import SurveyListThumbnails from "./SurveyListThumbnails";
 import SurveyModal from "./SurveyModal";
 

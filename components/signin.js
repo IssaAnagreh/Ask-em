@@ -10,20 +10,21 @@ import {
   Alert,
   AsyncStorage
 } from "react-native";
-import {Icon} from 'react-native-elements';
+import { connect } from 'react-redux';
+import { loggedIn } from '../store/actions/index';
+import { Icon } from 'react-native-elements';
 
 const ip = require("../ip.json");
 
-export default class Signin extends Component {
+class Signin extends Component {
   static navigationOptions = {
-    drawerIcon : ()=>(
-        <Icon name='star' style={{fontSize : 30 }} />
+    drawerIcon: () => (
+      <Icon name='star' style={{ fontSize: 30 }} />
     )
-};
+  };
   constructor(props) {
     super(props);
     this.state = {
-      username: "DEFAULT",
       password: "DEFAULT",
       loggedin: "Login", // custormer notification
       wrong: '' // if wrong username or password
@@ -62,7 +63,7 @@ export default class Signin extends Component {
       // Error retrieving data
       console.warn("error", error);
     }
-    
+
   }
 
   onLogin() {
@@ -103,12 +104,15 @@ export default class Signin extends Component {
             password: ''
           });
 
+          // save username into global
+          this.props.onAddUsername(accessToken.userName)
+
           // on success we will store the access_token in the AsyncStorage
           this.storeToken(accessToken);
 
           // no need to notify anything after loggin
           this.setState({
-            loggedin: ``
+            loggedin: `Welcome ${this.props.username}`
           });
 
           // navigate to Home after login
@@ -148,9 +152,13 @@ export default class Signin extends Component {
         this.setState({
           loggedin: `Login`
         });
+        // save username into global
+        this.props.onAddUsername('')
+        
+        // redirect to home screen
         this.props.navigation.navigate('Home', {
           accessToken: ''
-      })
+        })
       }
     } catch (error) {
       // Error retrieving data
@@ -271,3 +279,19 @@ const styles = StyleSheet.create({
     color: 'red'
   }
 });
+
+// global states
+const mapStateToProps = state => {
+  return {
+    username: state.username.username,
+  }
+}
+
+// global functions
+const mapDispatchToProps = dispatch => {
+  return {
+    onAddUsername: (username) => dispatch(loggedIn(username))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signin);
