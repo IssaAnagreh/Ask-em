@@ -6,7 +6,8 @@ import {
   View,
   Modal,
   TouchableHighlight,
-  TextInput
+  TextInput,
+  ScrollView
 } from "react-native";
 import {
   Container,
@@ -16,6 +17,7 @@ import {
   Text as Textbase
 } from "native-base";
 import { Icon } from "react-native-elements";
+//import Payment from "./Payment";
 
 export default class SurveyModal extends Component {
   constructor(props) {
@@ -59,73 +61,75 @@ export default class SurveyModal extends Component {
           animationType="slide"
           transparent={false}
           visible={this.props.visibility}
-          onRequestClose={() => {}}
+          onRequestClose={() => { }}
         >
-          <View style={styles.container}>
-            <View style={styles.modalContainer}>
-              <Text style={styles.text}>{survey}</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Survey Name"
-                placeholderTextColor="rgba(255, 255, 255, 0.7)"
-                onChangeText={surveyName => {
-                  this.handleSurveyNameChange(surveyName);
-                }}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="Survey Description"
-                placeholderTextColor="rgba(255, 255, 255, 0.7)"
-                onChangeText={surveyDescription => {
-                  this.handleSurveyDescriptionChange(surveyDescription);
-                }}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="Survey Category"
-                placeholderTextColor="rgba(255, 255, 255, 0.7)"
-                onChangeText={surveyCategory => {
-                  this.handleSurveyCategoryChange(surveyCategory);
-                }}
-              />
+          <ScrollView>
+            <View style={styles.container}>
+              <View style={styles.modalContainer}>
+                <Text style={styles.text}>{survey}</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Survey Name"
+                  placeholderTextColor="rgba(255, 255, 255, 0.7)"
+                  onChangeText={surveyName => {
+                    this.handleSurveyNameChange(surveyName);
+                  }}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Survey Description"
+                  placeholderTextColor="rgba(255, 255, 255, 0.7)"
+                  onChangeText={surveyDescription => {
+                    this.handleSurveyDescriptionChange(surveyDescription);
+                  }}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Survey Category"
+                  placeholderTextColor="rgba(255, 255, 255, 0.7)"
+                  onChangeText={surveyCategory => {
+                    this.handleSurveyCategoryChange(surveyCategory);
+                  }}
+                />
 
-              <View style={styles.buttonRow}>
-                <View style={styles.buttonSend}>
-                  <Button
-                    primary
-                    full
-                    block
-                    onPress={() => {
-                      this.props.submitModalHandler(
-                        surveyName,
-                        surveyDescription,
-                        surveyCategory
-                      );
-                    }}
-                  >
-                    {/* need to changeicon color */}
-                    <Icon name="send" style={{ color: "white" }} />
-                    <Textbase>Submit</Textbase>
-                  </Button>
-                </View>
+                <View style={styles.buttonRow}>
+                  <View style={styles.buttonSend}>
+                    <Button
+                      primary
+                      full
+                      block
+                      onPress={() => {
+                        this.props.submitModalHandler(
+                          surveyName,
+                          surveyDescription,
+                          surveyCategory
+                        );
+                      }}
+                    >
+                      {/* need to changeicon color */}
+                      <Icon name="send" style={{ color: "white" }} />
+                      <Textbase>Submit</Textbase>
+                    </Button>
+                  </View>
 
-                <View style={styles.buttonCancel}>
-                  <Button
-                    primary
-                    full
-                    block
-                    onPress={() => {
-                      this.props.showHandler(false);
-                    }}
-                  >
-                    {/* need to changeicon color */}
-                    <Icon name="backspace" style={{ color: "white" }} />
-                    <Textbase>Cancel</Textbase>
-                  </Button>
+                  <View style={styles.buttonCancel}>
+                    <Button
+                      primary
+                      full
+                      block
+                      onPress={() => {
+                        this.props.showHandler(false);
+                      }}
+                    >
+                      {/* need to changeicon color */}
+                      <Icon name="backspace" style={{ color: "white" }} />
+                      <Textbase>Cancel</Textbase>
+                    </Button>
+                  </View>
                 </View>
               </View>
             </View>
-          </View>
+          </ScrollView>
         </Modal>
       </View>
     );

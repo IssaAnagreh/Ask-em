@@ -6,6 +6,7 @@ import {
   TextInput
 } from "react-native";
 import { Container, Header, Text as Textbase, Left, Icon } from "native-base";
+import Payment from "./Payment";
 
 export default class Contact extends Component {
   static navigationOptions = {
@@ -27,8 +28,13 @@ export default class Contact extends Component {
           <Text style={styles.headerStyle}>Contact</Text>
         </Header>
         <View style={styles.container}>
-          <Text style={styles.text}> In Contact Component!</Text>
+                  
+          <Text style={styles.text}> In Contact!</Text>
+          
           <TextInput />
+        </View>
+        <View>
+          <Payment />
         </View>
       </View>
     );

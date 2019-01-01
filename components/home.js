@@ -133,14 +133,13 @@ export default class Home extends Component {
         return response.json();
       })
       .then(res => {
-        console.warn('in')
         this.setState({
           allSurveysInfo: res
         });
       })
       .done();
   };
- 
+
   render() {
     const {
       modalVisible,
@@ -165,9 +164,9 @@ export default class Home extends Component {
     return (
       <Container>
         <Header>
-        <Left>
-          <Icon style={styles.icon} name='menu' onPress={() => { this.props.navigation.openDrawer() }} />
-        </Left>
+          <Left>
+            <Icon style={styles.icon} name='menu' onPress={() => { this.props.navigation.openDrawer() }} />
+          </Left>
           <Text style={styles.headerStyle}>Welcome{itemId}to ASKem!</Text>
         </Header>
         <ScrollView>
@@ -209,19 +208,6 @@ const styles = StyleSheet.create({
     textAlign: "left",
     color: "white",
     fontSize: 22
-  },
-  title: {
-    marginTop: 65
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: "center"
-  },
-  button: {
-    color: "#000",
-    margin: 10,
-    fontSize: 30,
-    textAlign: "left"
   },
   icon: {
     color: "white",

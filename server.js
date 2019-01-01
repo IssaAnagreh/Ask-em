@@ -12,6 +12,25 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+// stripe
+var stripe = require("stripe")("sk_test_u63RgpjYkGwNAfZlcu9jBhKn");
+
+app.use(require("body-parser").text());
+app.post("/charge", async (req, res) => {
+  try {
+    let status = await stripe.charges.create({
+      amount: req.body.amount,
+      currency: "usd",
+      description: "An example charge",
+      source: req.body.tokenId
+    });
+    res.json(status);
+  } catch (err) {
+    res.status(500).end();
+  }
+});
+
+
 app.get("/isa", (req, res) => {
   res.status(200).send({ dark: brain.output.dark });
 });

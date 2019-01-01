@@ -13,6 +13,7 @@ import { Container, Header, Text as Textbase, Left } from "native-base";
 import { Icon } from 'react-native-elements';
 import SurveyListThumbnails from "./SurveyListThumbnails";
 import SurveyModal from "./SurveyModal";
+
 const ip = require("../ip.json");
 // import IP from 'ip';
 // ip = IP.mask()
@@ -152,13 +153,14 @@ export default class Account extends Component {
       images
     } = this.state;
     return (
-      <View>
+      <Container>
         <Header>
           <Left>
             <Icon style={styles.icon} name='menu' onPress={() => { this.props.navigation.openDrawer() }} />
           </Left>
           <Text style={styles.headerStyle}>Account</Text>
         </Header>
+        
         <ScrollView>
           <View>
             <SurveyModal
@@ -175,7 +177,7 @@ export default class Account extends Component {
             />
           </View>
         </ScrollView>
-      </View>
+      </Container>
     );
   }
 }
@@ -183,9 +185,11 @@ export default class Account extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "white"
+    backgroundColor: "white",
+    top: 0
   },
   headerStyle: {
     flex: 1,
@@ -196,28 +200,6 @@ const styles = StyleSheet.create({
     textAlign: "left",
     color: "white",
     fontSize: 22
-  },
-  text: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
-    textAlign: "left"
-  },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
-    textAlign: "left"
-  },
-  sectionHeader: {
-    paddingTop: 2,
-    paddingLeft: 10,
-    paddingRight: 300,
-    paddingBottom: 2,
-    fontSize: 20,
-    fontWeight: "bold",
-    backgroundColor: "rgba(247,247,247,1.0)",
-    textAlign: "left"
   },
   icon: {
     color: "white",
