@@ -93,6 +93,7 @@ class Signin extends Component {
             userName: response.username,
             userEmail: response.userEmail
           };
+          console.warn('accessToken', accessToken)
 
           // clear inputTexts
           this.textInput1.clear()

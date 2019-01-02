@@ -70,8 +70,10 @@ export default class Account extends Component {
   };
 
   onPressSurveysHasBeenAns = async () => {
+    
     try {
       const value = await AsyncStorage.getItem("userID");
+      console.warn(value)
       if (value !== null) {
         const token = JSON.parse(value);
         this.setState({
