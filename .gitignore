@@ -56,3 +56,4 @@ buck-out/
 *.jsbundle
 ip.json
 stripe.json
+net.json
