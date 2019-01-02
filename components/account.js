@@ -7,11 +7,14 @@ import {
   Modal,
   TouchableHighlight,
   AsyncStorage,
-  ScrollView
+  ScrollView,
+  Image,
+  TouchableOpacity
 } from "react-native";
 import { Container, Header, Text as Textbase, Left, Icon } from "native-base";
+//mport { Icon } from "react-native-elements";
 import SurveyListThumbnails from "./SurveyListThumbnails";
-import SurveyModal from "./SurveyModal";
+import { Col, Row, Grid } from "react-native-easy-grid";
 
 const ip = require("../ip.json");
 // import IP from 'ip';
@@ -19,38 +22,21 @@ const ip = require("../ip.json");
 
 export default class Account extends Component {
   static navigationOptions = {
-    drawerIcon: () => (
-      <Icon name='account-box' style={{ fontSize: 30 }} />
+    drawerIcon: ({ tintColor }) => (
+      <Icon name="account-box" style={{ fontSize: 30 }} />
     )
   };
   constructor(props) {
     super(props);
     this.state = {
       data: "",
-      names: [
-        {
-          key: "Isa",
-          imageURI:
-            "https://cdn-images-1.medium.com/max/1200/1*jh6bmapyE8nPWju7W_7qEw.png"
-        },
-        {
-          key: "Maram",
-          imageURI:
-            "https://softwareengineeringdaily.com/wp-content/uploads/2018/12/machinelearning.jpg"
-        },
-        {
-          key: "Anagreh",
-          imageURI:
-            "https://d2odgkulk9w7if.cloudfront.net/images/default-source/blogs/nativescript-vuef711652a7b776b26a649ff04000922f2.png?sfvrsn=75660efe_0"
-        }
-      ],
       modalVisible: false,
       selectedSurvey: null,
       surveyName: "",
       surveyDescription: "",
       surveyCategory: "",
-      loggedin: "",
-      allSurveysInfo: [],
+      fetchedSurveys: [],
+      user_id: null,
       images: [
         "https://cdn-images-1.medium.com/max/1200/1*jh6bmapyE8nPWju7W_7qEw.png",
         "https://softwareengineeringdaily.com/wp-content/uploads/2018/12/machinelearning.jpg",
@@ -59,24 +45,56 @@ export default class Account extends Component {
     };
   }
 
-  componentDidMount = async () => {
-    this.showAllSurveys();
+  onPressMySurveys = async () => {
     try {
       const value = await AsyncStorage.getItem("userID");
       if (value !== null) {
-        // We have data!!
         const token = JSON.parse(value);
         this.setState({
-          loggedin: ` ${token.userName} `
+          user_id: ` ${token.user_id} `
         });
-      } else {
-        this.setState({
-          loggedin: ""
-        });
+        fetch(`${ip}:3000/mysurveys`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: this.state.user_id })
+        })
+          .then(response => response.json())
+          .then(res => {
+            console.warn(res);
+            this.setState({ fetchedSurveys: res });
+          })
+          .done();
       }
     } catch (error) {
-      // Error retrieving data
-      console.warn("Login Please!")
+      console.warn("error from the token mysurveys", error);
+    }
+  };
+
+  onPressSurveysHasBeenAns = async () => {
+    
+    try {
+      const value = await AsyncStorage.getItem("userID");
+      console.warn(value)
+      if (value !== null) {
+        const token = JSON.parse(value);
+        this.setState({
+          user_id: ` ${token.user_id} `
+        });
+        fetch(`${ip}:3000/surveysAnsByUser`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: this.state.user_id })
+        })
+          .then(response => response.json())
+          .then(res => {
+            this.setState({ fetchedSurveys: res });
+          })
+          .done(() => {
+            console.warn(this.state.fetchedSurveys);
+          });
+      }
+    } catch (error) {
+      console.warn("error from the token surveysAnsByUser", error);
     }
   };
 
@@ -88,122 +106,122 @@ export default class Account extends Component {
     this.setState({ selectedSurvey: item });
   };
 
-  onChangeSurveyName = name => {
-    this.setState({
-      surveyName: name
-    });
-  };
-
-  onChangeSurveyDescription = description => {
-    this.setState({
-      surveyDescription: description
-    });
-  };
-
-  onChangeSurveyCategory = category => {
-    this.setState({
-      surveyCategory: category
-    });
-  };
-
-  onPressSubmitModal(surveyName, surveyDescription, surveyCategory) {
-    [...arguments].forEach(element => {
-      this.setState({ element });
-    });
-
-    fetch(`${ip}:3000/surveys`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        surveyName: surveyName,
-        surveyDescription: surveyDescription,
-        surveyCategory: surveyCategory
-      })
-    })
-      .then(response => response.json())
-      .then(res => {
-        this.setState({ modalVisible: false });
-        console.warn(res);
-      })
-      .done();
-  }
-
-  showAllSurveys = () => {
-    fetch(`${ip}:3000/surveys/`, {
-      method: "GET"
-    })
-      .then(response => {
-        return response.json();
-      })
-      .then(res => {
-        this.setState({
-          allSurveysInfo: res
-        });
-      })
-      .done();
-  };
-
   render() {
-    const {
-      data: { dark },
-      modalVisible,
-      selectedSurvey,
-      allSurveysInfo,
-      images
-    } = this.state;
     return (
-      <Container>
-        <Header>
-          <Left>
-            <Icon style={styles.icon} name='menu' onPress={() => { this.props.navigation.openDrawer() }} />
-          </Left>
-          <Text style={styles.headerStyle}>Account</Text>
-        </Header>
-        
-        <ScrollView>
-          <View>
-            <SurveyModal
-              showHandler={this.setModalVisible.bind(this)}
-              visibility={modalVisible}
-              selectedSurvey={selectedSurvey}
-              submitModalHandler={this.onPressSubmitModal.bind(this)}
-            />
+      <ScrollView>
+        <Grid>
+          <Row size={2}>
+            <View style={styles.container}>
+              <View style={styles.header} />
+              <Image
+                style={styles.avatar}
+                source={{
+                  uri: "https://bootdey.com/img/Content/avatar/avatar6.png"
+                }}
+              />
+              <View style={styles.body}>
+                <View style={styles.bodyContent}>
+                  <Text style={styles.name}>John Doe</Text>
+                  <Text style={styles.info}>
+                    UX Designer / Mobile developer
+                  </Text>
+                  <Text style={styles.description}>
+                    Lorem ipsum dolor sit amet, saepe sapientem eu nam. Qui ne
+                    assum electram expetendis, omittam deseruisse consequuntur
+                    ius an,
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.buttonContainer}
+                    onPress={() => {
+                      this.onPressMySurveys();
+                    }}
+                  >
+                    <Text>My Surveys</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.buttonContainer}
+                    onPress={() => {
+                      this.onPressSurveysHasBeenAns();
+                    }}
+                  >
+                    <Text>Answered Surveys</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Row>
+          <Row size={2}>
             <SurveyListThumbnails
-              allSurveys={allSurveysInfo}
+              allSurveys={this.state.fetchedSurveys}
               selectedSurvey={this.selectedSurvey.bind(this)}
               showHandler={this.setModalVisible.bind(this)}
-              surveyImages={images}
+              surveyImages={this.state.images}
             />
-          </View>
-        </ScrollView>
-      </Container>
+          </Row>
+        </Grid>
+      </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "column",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: "white",
-    top: 0
+  header: {
+    backgroundColor: "#00BFFF",
+    height: 200
   },
-  headerStyle: {
+  avatar: {
+    width: 130,
+    height: 130,
+    borderRadius: 63,
+    borderWidth: 4,
+    borderColor: "white",
+    marginBottom: 10,
+    alignSelf: "center",
+    position: "absolute",
+    marginTop: 75
+  },
+  name: {
+    fontSize: 22,
+    color: "#FFFFFF",
+    fontWeight: "600"
+  },
+  body: {
+    marginTop: 40
+  },
+  bodyContent: {
     flex: 1,
-    flexDirection: "column",
     alignItems: "center",
+    padding: 30
+  },
+  name: {
+    fontSize: 28,
+    color: "#696969",
+    fontWeight: "600"
+  },
+  info: {
+    fontSize: 16,
+    color: "#00BFFF",
+    marginTop: 10
+  },
+  description: {
+    fontSize: 16,
+    color: "#696969",
+    marginTop: 10,
+    textAlign: "center"
+  },
+  buttonContainer: {
+    marginTop: 10,
+    height: 45,
+    flexDirection: "row",
     justifyContent: "center",
-    textAlignVertical: "center",
-    textAlign: "left",
-    color: "white",
-    fontSize: 22
+    alignItems: "center",
+    marginBottom: 20,
+    width: 250,
+    borderRadius: 30,
+    backgroundColor: "#00BFFF"
   },
-  icon: {
-    color: "white",
-    margin: 10,
-    fontSize: 40,
-    textAlign: "left"
+  thumbnails: {
+    // marginTop: 50,
+    color: "black"
   }
 });

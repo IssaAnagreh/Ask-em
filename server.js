@@ -6,7 +6,6 @@ const db = require("./database/index");
 const surveyHelpers = require("./server/surveyHelpers");
 const signIn = require("./server/signIn");
 const signUp = require("./server/signUp");
-const bcrypt = require("bcrypt-nodejs");
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -29,16 +28,30 @@ app.get("/surveys", surveyHelpers.getAllSurveys);
 
 app.post("/surveys", surveyHelpers.saveSurvey);
 
+app.post("/mysurveys", (req, res) => {
+  console.log("in my survey");
+  db.selectAllSurveysOfUser(req.body.id, function(err, results) {
+    if (err) throw err;
+    console.log(results);
+    res.status(200).send(results);
+  });
+});
+// return all serveys has been answerd by specfic user
+app.post("/surveysAnsByUser", (req, res) => {
+  db.selectAllServeyHasBeenAnswerd(req.body.id, function(err, results) {
+    if (err) throw err;
+    res.status(200).send(results);
+  });
+});
+
 app.post("/answer/smart/add", surveyHelpers.fillSmartAnswer);
 
 app.post("/answer/dump/add", surveyHelpers.fillAnswer);
-
 
 app.post("/mysurveys", (req, res) => {
   console.log("search server", req.body);
   res.status(200).send({});
 });
-
 
 //NOTE: 0-->(Not save) 1-->(save correctly)
 app.get("/user", (req, res) => {

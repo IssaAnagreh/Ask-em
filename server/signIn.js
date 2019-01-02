@@ -10,15 +10,13 @@ const authenticateUser = (req, res) => {
         res.status(404).send("Invalid login")
       } else {
         if (result.length > 0) {
-          console.log(result)
           bcrypt.compare(password, result[0].password, (err, matchPassword) => {
-            console.log("matchPassword", matchPassword);
             if (matchPassword) {
-              const { userId, username, userEmail } = result[0];
+              const { id, username, email } = result[0];
               res.status(200).send({
-                userId: userId,
+                userId: id,
                 username: username,
-                userEmail: userEmail
+                userEmail: email
               });
             } else {
               res.status(404).send("username or password is wrong");
