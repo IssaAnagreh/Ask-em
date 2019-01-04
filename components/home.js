@@ -60,12 +60,13 @@ export default class Home extends Component {
   }
 
   componentDidMount = async () => {
-    this.showAllSurveys();
+    
     try {
       const value = await AsyncStorage.getItem("userID");
-      if (value !== null) {
+      if (value !== null && !this.state.loggedin) {
         // We have data!!
-        const token = JSON.parse(value);
+        const token = (JSON.parse(value));
+        this.showAllSurveys(token.user_id);
         this.setState({
           loggedin: ` ${token.userName} `
         });
@@ -75,6 +76,7 @@ export default class Home extends Component {
         });
       }
     } catch (error) {
+      console.warn("errer home didmount", error)
       // Error retrieving data
     }
   };
@@ -125,23 +127,24 @@ export default class Home extends Component {
       .then(response => response.json())
       .then(res => {
         this.setState({ modalVisible: false });
-        console.warn(res);
       });
   }
 
-  showAllSurveys = () => {
-    fetch(`${ip}:3000/surveys/`, {
-      method: "GET"
+  showAllSurveys = (id) => {
+    fetch(`${ip}:3000/home/`, {
+      method: "POST",
+      headers: { 
+        'Accept':'application/json',
+        "Content-Type": "application/json" 
+      },
+      body: JSON.stringify({ id: id })
     })
-      .then(response => {
-        return response.json();
-      })
+      .then(response => response.json())
       .then(res => {
-        this.setState({
-          allSurveysInfo: res
-        });
+        this.setState({ allSurveysInfo: res });
       })
-      .done();
+      .done(() => {
+      });
   };
 
   render() {

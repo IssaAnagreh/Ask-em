@@ -24,7 +24,8 @@ app.post("/signup", signUp);
 
 app.post("/login", signIn);
 
-app.get("/surveys", surveyHelpers.getAllSurveys);
+//app.get("/surveys", surveyHelpers.getAllSurveys);
+app.post("/home", surveyHelpers.getAllSurveys);
 
 app.post("/surveys", surveyHelpers.saveSurvey);
 

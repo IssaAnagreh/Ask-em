@@ -2,7 +2,6 @@ const bcrypt = require("bcrypt-nodejs");
 const DB = require("../database/index");
 
 const authenticateUser = (req, res) => {
-  console.log("===login===");
   if (req.body.username && req.body.password) {
     const { username, password } = req.body;
     DB.selectUser(username, (err, result) => {
