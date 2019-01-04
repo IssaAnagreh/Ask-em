@@ -60,7 +60,6 @@ const fillSmartAnswer = (req, res) => {
   } else {
     res.status(402).send("no answer");
   }
-  res.sendStatus(500);
 };
 
 const fillAnswer = (req, res) => {

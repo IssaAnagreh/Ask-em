@@ -16,9 +16,11 @@ app.get("/isa", (req, res) => {
 });
 
 app.post("/search", (req, res) => {
-  console.log("search server", req.body);
-  res.status(200).send({});
-});
+  db.selectSearchsurvey(req.body.text, function(err, results){
+    if (err) throw err;
+    res.status(200).send(JSON.stringify({results, results}))
+  })
+})
 
 app.post("/signup", signUp);
 
