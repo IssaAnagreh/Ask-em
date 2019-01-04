@@ -41,6 +41,7 @@ export default class Header1 extends Component {
     fetch(`${ip}:3000/search/`, {
       method: "POST",
       headers: {
+        'Accept':'application/json',
         "Content-Type": "application/json"
       },
       body: JSON.stringify({ text: this.state.text })

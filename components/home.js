@@ -112,7 +112,10 @@ export default class Home extends Component {
 
     fetch(`${ip}:3000/surveys`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        'Accept':'application/json',
+        "Content-Type": "application/json" 
+      },
       body: JSON.stringify({
         surveyName: surveyName,
         surveyDescription: surveyDescription,
