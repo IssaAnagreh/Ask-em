@@ -56,7 +56,7 @@ export default class Account extends Component {
       genders: [],
       maritalstatuses: [],
       educationlevels: [],
-      finalSmartAnswer: "Show final smart answer",
+      finalSmartAnswer: ["Show final smart answer"],
     };
   }
 

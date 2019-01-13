@@ -435,7 +435,7 @@ app.post("/smart/answer/final", async (req, res) => {
 					console.log('err fillAnswerOfAResult in brainServer',err);
 				}
 			})
-			res.status(200).send(output)
+			res.status(200).send([output, results])
 			return output;
 		}
 	}

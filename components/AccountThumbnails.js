@@ -58,7 +58,6 @@ export default class AccountThumbnails extends Component {
                     >
                       <Text key={survey.id}>
                         {survey.survey_name}
-                        {survey.id}
                       </Text>
                     </TouchableHighlight>
 

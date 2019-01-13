@@ -302,6 +302,19 @@ class SurveyStats extends React.PureComponent {
   };
 
   render() {
+    var smartValue2 = '';
+    var smartValue1 = this.props.finalSmartAnswerValue[0];
+    var check = [];
+    if (typeof this.props.finalSmartAnswerValue === 'string'){
+      check = JSON.parse(this.props.finalSmartAnswerValue)
+      if (check[1]['yes'] > check[1]['no']) {
+        smartValue2 = 'Yes: ' + check[1]['yes']*100 + '%';
+      } else {
+        smartValue2 = 'No: ' + check[1]['no']*100 + '%';
+      }
+      
+      smartValue1 = check[0]
+    }
     var xx = this.state.x;
     var yy = this.state.y;
     var zz = this.state.z;
@@ -406,9 +419,10 @@ class SurveyStats extends React.PureComponent {
                   </Textnative>
                 </View>
               </Row>
-              <Text style={{ color: "black", fontSize: 18 }}>Fill smart data</Text>
+              
               <Row size={1}>
                 <View style={{ flex: 1, alignItems: 'center', marginTop: 40, }}>
+                <Textnative style={{ color: "black", fontSize: 18 }}>Fill smart data:</Textnative>
                   <TextInput
                     placeholder="Issue Brief Description"
                     placeholderTextColor="gray"
@@ -462,14 +476,27 @@ class SurveyStats extends React.PureComponent {
                   <Textnative
                     style={{
                       textAlign: "center",
-                      fontSize: 14,
-                      color: "black"
+                      fontSize: 16,
+                      marginTop: 6,
+                      color: "black",
+                      fontWeight: 'bold'
                     }}
                   >
-                    {this.props.finalSmartAnswerValue}
+                    {smartValue1}
                   </Textnative>
 
                 </TouchableHighlight>
+                <Textnative
+                    style={{
+                      textAlign: "center",
+                      fontSize: 16,
+                      marginTop: 8,
+                      color: "black",
+                      fontWeight: 'bold'
+                    }}
+                  >
+                    {smartValue2}
+                  </Textnative>
               </View>
             </GridEasy>
           </ScrollView>
@@ -495,10 +522,13 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
     alignItems: "center",
+    alignContent: "center",
+    marginTop: 20,
   },
   button: {
     height: 40,
-    //alignItems: "center",
+    alignItems: "center",
+    alignContent: "center",
     marginBottom: 10,
     width: 200,
     borderRadius: 30,
