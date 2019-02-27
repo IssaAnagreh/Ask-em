@@ -2,7 +2,7 @@
 
 # Ask'em
 Use machine learning to make the right decisions. The process of the marketing is usually expensive, sometimes ineffective and might take a long time. And to make it worse, these marekting decisions could end up not matching people's needs afterwards. But here's where our app can become handy; aided by the power of machine learning's neural networks, you can take your decision making process to the next level with increased effectiveness, speed, accessability and lesser costs.
-
+You can take a real look on the app in this video: https://youtu.be/xsHjoiNxPB0
 
 ![Machine Learning](https://mobilemonitoringsolutions.com/wp-content/uploads/2018/09/mldepressiongif.gif)
 
